@@ -70,13 +70,13 @@ const Content = () => {
 
                         const date = getDays(created_at)
 
-                        return <div className="issue-heading-wrapper">
+                        return <div key={created_at} className="issue-heading-wrapper">
 
                             <div className="issue-heading">
                                 <span></span>{title}
 
                                 {labels && labels.map((label) => {
-                                    return <Label name={label?.name} color={label?.color} />
+                                    return <Label key={label?.name} name={label?.name} color={label?.color} />
 
                                 })
                                 }
