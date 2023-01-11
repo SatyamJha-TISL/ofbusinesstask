@@ -1,0 +1,36 @@
+@import "./styles/Content";
+@import "./styles/Header";
+@import "./styles/Label.scss";
+
+
+* {
+  padding: none;
+  margin: none;
+  box-sizing: border-box;
+
+}
+
+html {
+  font-size: 10px;
+
+  @media(max-width: 768px) {
+    font-size: 15px;
+  }
+}
+
+.App {
+  font-family: sans-serif;
+  text-align: center;
+
+  .component-wrapper {
+    font-size: 1.5rem;
+
+    @media (max-width:768px) {
+
+      width: fit-content;
+      font-size: 2rem;
+    }
+
+
+  }
+}
