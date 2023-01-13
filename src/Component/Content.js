@@ -72,7 +72,7 @@ const Content = () => {
                         return <div key={elem.id} className="issue-heading-wrapper">
 
                             <div className="issue-heading">
-                                <span></span>{title}
+                                <span>{title}</span>
 
                                 {labels && labels.map((label) => {
                                     return <Label key={label?.id} name={label?.name} color={label?.color} />

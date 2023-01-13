@@ -13,7 +13,7 @@
 html {
   font-size: 10px;
 
-  @media(max-width: 768px) {
+  @media screen and (max-width: 768px) {
     font-size: 15px;
   }
 }
@@ -27,12 +27,11 @@ html {
   .component-wrapper {
     font-size: 1.5rem;
 
-    @media (max-width:768px) {
+    @media screen and (max-width:768px) {
 
-      width: fit-content;
-      font-size: 2rem;
+      font-size: inherit;
+
     }
-
 
   }
 }
