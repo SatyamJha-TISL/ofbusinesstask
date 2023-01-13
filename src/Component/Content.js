@@ -1,24 +1,27 @@
-import { Suspense, useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { Label } from "./Label";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretDown, faCheck, faSpinner } from '@fortawesome/free-solid-svg-icons'
 import { getDays } from "../utils/functions";
+import _ from "lodash";
 
 const Content = () => {
 
 
-    const [data, setData] = useState();
+    const [data, setData] = useState([]);
     const [count, setCount] = useState(1)
     const [loader, setLoader] = useState(false)
 
-    const fetchData = async () => {
+    const contentRef = useRef(null)
+
+    const fetchData = async (forPage) => {
         setLoader(true);
 
-        const data = await axios.get("https://api.github.com/repos/facebook/react/issues", { params: { page: count } });
+        const responseData = await axios.get("https://api.github.com/repos/facebook/react/issues", { params: { page: forPage } });
 
         if (data) {
-            setData(data?.data);
+            setData([...data, ...responseData?.data]);
             setLoader(false);
         }
         else {
@@ -28,24 +31,20 @@ const Content = () => {
     }
 
     useEffect(() => {
+        fetchData(1)
+    }, [])
 
-        if (count < 1) {
-
-            setCount(1)
-            return
+    const handleScroll = _.debounce((e) => {
+        if ((e.target.offsetHeight + e.target.scrollTop) >= e.target.scrollHeight - 10) {
+            fetchData(count + 1);
+            setCount(count + 1)
         }
+    }, 500)
 
-        fetchData()
-
-    }, [count])
-
-    if (loader) {
-        return <FontAwesomeIcon icon={faSpinner} spin size="6x" />
-    }
     return (
         <div>
 
-            <div className="content-full-section-wrapper">
+            <div className="content-full-section-wrapper" onScroll={handleScroll}>
                 <div className="content-top-section">
                     <div className="content-top-left-section">
                         <div className="content-top-left-section-tab"> 636 open</div>
@@ -62,7 +61,7 @@ const Content = () => {
                 </div>
 
 
-                <div className="content-bottom-section">
+                <div className="content-bottom-section" ref={contentRef}>
 
 
                     <div className="content-bottom-issues-container-details">  {data && data.map((elem) => {
@@ -70,13 +69,13 @@ const Content = () => {
 
                         const date = getDays(created_at)
 
-                        return <div key={created_at} className="issue-heading-wrapper">
+                        return <div key={elem.id} className="issue-heading-wrapper">
 
                             <div className="issue-heading">
                                 <span></span>{title}
 
                                 {labels && labels.map((label) => {
-                                    return <Label key={label?.name} name={label?.name} color={label?.color} />
+                                    return <Label key={label?.id} name={label?.name} color={label?.color} />
 
                                 })
                                 }
@@ -92,7 +91,9 @@ const Content = () => {
                 </div>
 
             </div>
-            <div className="nav-buttons"><div className="button" onClick={() => setCount(count - 1)}>Previous</div> <div className="button" onClick={() => setCount(count + 1)}>Next</div> </div>
+
+            {loader ? <FontAwesomeIcon icon={faSpinner} spin size="6x" /> : ""}
+
         </div>
 
     );

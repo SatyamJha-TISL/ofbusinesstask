@@ -21,6 +21,8 @@ html {
 .App {
   font-family: sans-serif;
   text-align: center;
+  height: 100vh;
+  overflow: hidden;
 
   .component-wrapper {
     font-size: 1.5rem;

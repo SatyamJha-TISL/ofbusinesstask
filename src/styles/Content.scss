@@ -5,6 +5,8 @@
     margin: auto;
     border-radius: 0.2rem;
     border: 1px solid #d8dee3;
+    height: calc(100vh - 25rem);
+    overflow-y: scroll;
 
     @media (max-width:768px) {
         width: 100%;
